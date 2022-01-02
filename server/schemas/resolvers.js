@@ -4,10 +4,12 @@ const { signToken } = require('../utils/auth');
 
 const resolvers = {
     Query: {
-        user: async (parent, args) => {
-            return User.findOne({
-                $or: [{ _id: args._id}, { username: args.username }],
-              })
+        user: async (parent, args, context) => {
+            if(context.user) {
+                return User.findOne({
+                    $or: [{ _id: context.user._id}, { username: context.user.username }],
+                  })
+            }
         }
     },
     Mutation: {
